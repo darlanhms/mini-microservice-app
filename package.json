@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "mini-microservice-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/darlanhms/mini-microservice-app.git",
+  "author": "Darlan H. <darlanhermessjb@hotmail.com>",
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+      "blog/**"
+    ]
+  }
+}
