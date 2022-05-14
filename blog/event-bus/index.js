@@ -22,5 +22,5 @@ app.post('/events', async (req, res) => {
 
 
 app.listen(4005, () => {
-    console.log("comments service listening on port 4005")
+    console.log("event bus service listening on port 4005")
 })

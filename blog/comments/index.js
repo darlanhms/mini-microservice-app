@@ -25,8 +25,7 @@ app.post("/posts/:id/comments", async (req, res) => {
 
     comments.push({
         id: commentId,
-        content,
-        postId: req.params.id
+        content
     })
 
     commentsByPostId[req.params.id] = comments;
@@ -35,7 +34,8 @@ app.post("/posts/:id/comments", async (req, res) => {
         type: 'CommentCreated',
         data: {
             id: commentId,
-            content
+            content,
+            postId: req.params.id
         }
     })
 
