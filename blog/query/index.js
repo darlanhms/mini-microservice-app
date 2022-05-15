@@ -14,15 +14,38 @@ app.get('/posts', async (req, res) => {
     return res.json(posts);
 })
 
-app.post('/events', async (req, res) => {
-    const event = req.body;
+const handlePostCreatedEvent = (data) => {
+    posts[data.id] = {
+        ...data,
+        comments: []
+    };
+}
 
-    switch(event.type) {
+const handleCommentCreatedEvent = (data) => {
+    posts[data.postId].comments.push(data)
+}
+
+const handleCommentUpdatedEvent = (data) => {
+    const post = posts[data.postId];
+
+    const comment = post.comments.find(comment => comment.id === data.id);
+
+    comment.content = data.content;
+    comment.status = data.status;
+}
+
+app.post('/events', async (req, res) => {
+    const { type, data } = req.body;
+
+    switch (type) {
         case 'PostCreated':
-            posts[event.data.id] = {...event.data, comments: []};
+            handlePostCreatedEvent(data)
             break;
         case 'CommentCreated':
-            posts[event.data.postId].comments.push(event.data)
+            handleCommentCreatedEvent(data)
+            break;
+        case 'CommentUpdated':
+            handleCommentUpdatedEvent(data)
             break;
         default:
             break;
