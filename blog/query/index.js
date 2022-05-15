@@ -34,8 +34,8 @@ const handleCommentUpdatedEvent = (data) => {
     comment.status = data.status;
 }
 
-app.post('/events', async (req, res) => {
-    const { type, data } = req.body;
+const handleEvent = (event) => {
+    const { type, data } = event;
 
     switch (type) {
         case 'PostCreated':
@@ -50,11 +50,29 @@ app.post('/events', async (req, res) => {
         default:
             break;
     }
+}
+
+app.post('/events', async (req, res) => {
+    const event = req.body;
+
+    handleEvent(event);
 
     return res.send({ status: 'OK' })
 })
 
 
-app.listen(4002, () => {
+app.listen(4002, async () => {
     console.log("query service listening on port 4002")
+
+    try {
+        const { data: events } = await axios.get("http://localhost:4005/events");
+
+        for (let event of events) {
+            console.log("Processing event:", event.type);
+
+            handleEvent(event)
+        }
+    } catch (error) {
+        console.log("Error when getting events " + error);
+    }
 })

@@ -8,10 +8,14 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+const events = [];
+
 app.post('/events', async (req, res) => {
     const event = req.body;
 
     console.log('event received', event);
+
+    events.push(event);
 
     axios.post('http://localhost:4000/events', event).catch(err => { });
     axios.post('http://localhost:4001/events', event).catch(err => { });
@@ -19,6 +23,10 @@ app.post('/events', async (req, res) => {
     axios.post('http://localhost:4003/events', event).catch(err => { });
 
     return res.send({ status: 'OK' })
+})
+
+app.get("/events", (req, res) => {
+    return res.send(events)
 })
 
 
